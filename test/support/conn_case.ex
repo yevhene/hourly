@@ -20,19 +20,39 @@ defmodule Hourly.Web.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import Hourly.Web.Router.Helpers
+      import Hourly.Factory
+      alias Hourly.Repo
 
       # The default endpoint for testing
       @endpoint Hourly.Web.Endpoint
     end
   end
 
-
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Hourly.Repo)
+
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(Hourly.Repo, {:shared, self()})
     end
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+
+    conn = Phoenix.ConnTest.build_conn()
+    params = []
+
+    {conn, params} = unauthorized(conn, tags, params)
+
+    params = params ++ [conn: conn]
+    {:ok, params}
   end
 
+  defp unauthorized(conn, tags, params) do
+    if !tags[:unauthorized] do
+      session = Hourly.Factory.insert(:session)
+      params = params ++ [session: session]
+      conn = conn |>
+        Plug.Conn.put_req_header("authorization", "Bearer #{session.token}")
+      {conn, params}
+    else
+      {conn, params}
+    end
+  end
 end

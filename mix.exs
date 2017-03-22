@@ -33,7 +33,9 @@ defmodule Hourly.Mixfile do
      {:phoenix_ecto, "~> 3.2"},
      {:postgrex, ">= 0.0.0"},
      {:gettext, "~> 0.11"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:comeonin, "~> 3.0"},
+     {:ex_machina, "~> 2.0", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

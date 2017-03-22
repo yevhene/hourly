@@ -5,7 +5,27 @@ defmodule Hourly.Web.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", Hourly.Web do
-    pipe_through :api
+  pipeline :auth do
+    plug Hourly.Plugs.Authenticate
+  end
+
+  scope "/accounts", Hourly.Web.Accounts, as: :accounts do
+    scope "/" do
+      pipe_through :api
+
+      resources "/session", SessionController,
+        only: [:create], singleton: true
+      resources "/user", UserController,
+        only: [:create], singleton: true
+    end
+
+    scope "/" do
+      pipe_through [:api, :auth]
+
+      resources "/session", SessionController,
+        only: [:show, :delete], singleton: true
+      resources "/user", UserController,
+        only: [:show, :update, :delete], singleton: true
+    end
   end
 end

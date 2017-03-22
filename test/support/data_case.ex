@@ -22,6 +22,7 @@ defmodule Hourly.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Hourly.DataCase
+      import Hourly.Factory
     end
   end
 
