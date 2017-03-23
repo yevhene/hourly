@@ -17,4 +17,11 @@ defmodule Hourly.Factory do
       token: Hourly.Accounts.Utils.generate_token()
     }
   end
+
+  def project_factory do
+    %Hourly.Tracking.Project{
+      user: build(:user),
+      name: sequence(:name, &"project-#{&1}")
+    }
+  end
 end

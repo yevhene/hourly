@@ -8,6 +8,7 @@ defmodule Hourly.Accounts.User do
     field :password, :string, virtual: true
 
     has_many :sessions, Hourly.Accounts.Session
+    has_many :projects, Hourly.Tracking.Project
 
     timestamps(type: :utc_datetime)
   end

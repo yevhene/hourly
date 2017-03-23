@@ -28,4 +28,10 @@ defmodule Hourly.Web.Router do
         only: [:show, :update, :delete], singleton: true
     end
   end
+
+  scope "/", Hourly.Web.Tracking, as: :tracking do
+    pipe_through [:api, :auth]
+
+    resources "/projects", ProjectController, except: [:new, :edit]
+  end
 end
