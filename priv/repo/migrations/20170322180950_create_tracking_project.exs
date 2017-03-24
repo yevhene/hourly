@@ -3,7 +3,7 @@ defmodule Hourly.Repo.Migrations.CreateHourly.Tracking.Project do
 
   def change do
     create table(:tracking_projects) do
-      add :name, :string
+      add :name, :string, null: false
 
       add :user_id, references(:accounts_users, on_delete: :delete_all),
         null: false

@@ -38,12 +38,10 @@ defmodule Hourly.Web.Tracking.ProjectControllerTest do
   end
 
   describe "create/2" do
-    @valid_attrs %{name: "project"}
-    @invalid_attrs %{}
-
     test "creates project", %{conn: conn} do
       conn = post conn, tracking_project_path(conn, :create),
-        project: @valid_attrs
+        project: params_for(:project)
+
       id = json_response(conn, 201)["data"]["id"]
 
       assert id
@@ -52,33 +50,31 @@ defmodule Hourly.Web.Tracking.ProjectControllerTest do
 
     test "does not creates project if data is invalid", %{conn: conn} do
       conn = post conn, tracking_project_path(conn, :create),
-        project: @invalid_attrs
+        project: params_for(:invalid_project)
 
       assert json_response(conn, 422)["errors"] != %{}
     end
   end
 
   describe "update/2" do
-    @valid_attrs %{name: "project"}
-    @invalid_attrs %{name: nil}
-
     setup %{conn: conn, session: %{user: user}} do
       {:ok, conn: conn, project: insert(:project, user: user)}
     end
 
     test "updates project", %{conn: conn, project: project} do
+      attrs = params_for(:project)
       conn = put conn, tracking_project_path(conn, :update, project),
-        project: @valid_attrs
+        project: attrs
 
       assert json_response(conn, 200)["data"]["id"] == project.id
-      assert Repo.get_by(Project, @valid_attrs)
+      assert Repo.get_by(Project, attrs)
     end
 
     test "does not updates project if data is invalid", %{
       conn: conn, project: project
     } do
       conn = put conn, tracking_project_path(conn, :update, project),
-        project: @invalid_attrs
+        project: params_for(:invalid_project)
 
       assert json_response(conn, 422)["errors"] != %{}
     end
