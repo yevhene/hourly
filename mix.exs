@@ -9,7 +9,8 @@ defmodule Hourly.Mixfile do
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      start_permanent: Mix.env == :prod,
      aliases: aliases(),
-     deps: deps()]
+     deps: deps(),
+     test_coverage: [tool: ExCoveralls]]
   end
 
   # Configuration for the OTP application.
@@ -35,7 +36,9 @@ defmodule Hourly.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:comeonin, "~> 3.0"},
-     {:ex_machina, "~> 2.0", only: :test}]
+     {:ex_machina, "~> 2.0", only: :test},
+     {:excoveralls, "~> 0.6", only: :test},
+     {:junit_formatter, "~> 1.3", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
