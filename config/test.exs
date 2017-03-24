@@ -9,6 +9,11 @@ config :hourly, Hourly.Web.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
+config :junit_formatter,
+  report_file: "test-results.xml",
+  report_dir: "tmp",
+  print_report_file: true
+
 # Configure your database
 config :hourly, Hourly.Repo,
   adapter: Ecto.Adapters.Postgres,

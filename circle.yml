@@ -1,0 +1,56 @@
+version: 2
+jobs:
+  build:
+    working_directory: /root/app
+    docker:
+      - image: elixir:1.4.2
+        environment:
+          MIX_ENV: test
+      - image: postgres:9.6.2
+        environment:
+          POSTGRES_DB: hourly_test
+    steps:
+      - run:
+          name: Ensure Git
+          command: apt-get -qq update; apt-get -y install git
+
+      - checkout
+
+      - run:
+          name: Hex
+          command: mix local.hex --force
+
+      - run:
+          name: Hex
+          command: mix local.rebar --force
+
+      - restore_cache:
+          key: dependency-cache-{{ checksum "mix.lock" }}
+
+      - run:
+          name: Deps
+          command: mix deps.get
+
+      - save_cache:
+          key: dependency-cache-{{ checksum "mix.lock" }}
+          paths:
+            - deps
+
+      - run:
+          name: Compile
+          command: mix compile
+
+      - run:
+          name: Setup DB
+          command: mix ecto.setup
+
+      - run:
+          name: Test
+          command: mix coveralls.html
+
+      - store_artifacts:
+          path: tmp/coverage
+          destination: tmp/coverage
+
+      - store_test_results:
+          path: tmp
