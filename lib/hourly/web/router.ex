@@ -33,5 +33,6 @@ defmodule Hourly.Web.Router do
     pipe_through [:api, :auth]
 
     resources "/projects", ProjectController, except: [:new, :edit]
+    resources "/records", RecordController, except: [:new, :edit]
   end
 end
