@@ -1,0 +1,29 @@
+version: "3"
+services:
+  web:
+    build: .
+    command: bash -c "sleep 5 && mix ecto.migrate && mix phx.server"
+    environment:
+      MIX_ENV: prod
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: hourly
+      DB_HOST: db
+      PORT: "4000"
+    ports:
+      - "4000:4000"
+    links:
+      - db
+    volumes:
+      - .:/app
+
+  db:
+    image: "postgres:9.6.2"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hourly
+    volumes:
+      - /var/lib/postgres

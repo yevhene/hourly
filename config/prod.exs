@@ -58,6 +58,14 @@ config :logger, level: :info
 #     config :hourly, Hourly.Web.Endpoint, server: true
 #
 
+config :hourly, Hourly.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  username: System.get_env("DB_USER"),
+  password: System.get_env("DB_PASS"),
+  database: System.get_env("DB_NAME"),
+  hostname: System.get_env("DB_HOST"),
+  pool_size: 20
+
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
 import_config "prod.secret.exs"
